@@ -1,25 +1,56 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Nav from './Nav';
+import NodeList from './NodeList';
+import NodeForm from './NodeForm';
+import {noteData } from './Components/firebaseConnect';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+
+  //   }
+  // }
+  // addData = (item) => {
+  //   noteData.push(item)
+  // }
+  showForm = () => {
+    if(this.props.isEdit){
+      return <NodeForm/>
+    }
+  }
+  
+
+
+  render(){
+
+    return (
+      <div>
+        <Nav/>
+        <div className="container">
+          <div className="row">
+            <NodeList/>
+            {/* <NodeForm getData={(item)=>this.addData(item)} /> */}
+            {this.showForm()}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
-
-export default App;
+const mapStateToProps = (state, ownProps) => {
+  return{
+      isEdit: state.isEdit
+  }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return{
+      changeEditStatus: () =>{
+          dispatch({type:"CHANGE_EDIT_STATUS"})
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(App)
